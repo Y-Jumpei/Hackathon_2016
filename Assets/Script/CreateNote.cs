@@ -1,25 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CreateNote : MonoBehaviour
 {
-    private Vector3 q_point = new Vector3(-5, 1, 10);
-    private Vector3 w_point = new Vector3(-1, 1, 10);
-    private Vector3 e_point = new Vector3(1, 1, 10);
-    private Vector3 r_point = new Vector3(5, 1, 10);
+    private Vector3 q_point = new Vector3(-5, 1, 20);
+    private Vector3 w_point = new Vector3(-1, 1, 20);
+    private Vector3 e_point = new Vector3(1, 1, 20);
+    private Vector3 r_point = new Vector3(5, 1, 20);
 
     public GameObject note;
     public int index;
     public float delay;
     public float speed = 500f;
 
-    // Use this for initialization
     void Start()
     {
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (index < Beat.timing.Length && Beat.timer >= Beat.timing[index] - delay)
