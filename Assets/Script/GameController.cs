@@ -4,13 +4,14 @@ public class GameController : MonoBehaviour
 {
     private MusicScorePlayer player = new MusicScorePlayer();
 
-    public GameObject L_hand_palm;
+    public GameObject notePrefab;
 
-    private void OnNoteTiming(
-        object sender,
+    private void OnNoteTiming(object sender,
         MusicScorePlayer.MusicScoreEventArgs e)
     {
-        Debug.Log(e.Note.Time);
+        var note = Instantiate(notePrefab);
+        note.transform.position = new Vector3(e.Note.X, e.Note.Y, 50);
+        note.name = "Note";
     }
 
     public void Start()
