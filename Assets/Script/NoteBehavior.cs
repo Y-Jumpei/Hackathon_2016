@@ -12,7 +12,6 @@ public class NoteBehavior : MonoBehaviour
 
     void Start()
     {
-        Speed = 0.1f;
     }
 
     void Update()

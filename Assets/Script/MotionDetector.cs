@@ -26,6 +26,9 @@ public class MotionDetector : MonoBehaviour
         private Predicate<Vector3> predicate;
         private Vector3 prevPosition;
 
+        private int detectInterval = 3;
+        private int elapsedFromDetect = 0;
+
         public bool IsDetected { get; private set; }
 
         public SlideDetector(GameObject target, Predicate<Vector3> predicate)
@@ -38,12 +41,18 @@ public class MotionDetector : MonoBehaviour
 
         public void Update()
         {
-            IsDetected = predicate(prevPosition - target.transform.position);
+            IsDetected = false;
+            if (elapsedFromDetect > detectInterval)
+            {
+                IsDetected = predicate(prevPosition - target.transform.position);
+                elapsedFromDetect = 0;
+            }
+            elapsedFromDetect += 1;
             prevPosition = target.transform.position;
         }
     }
 
-    private float slideThreshold = 1f;
+    private float slideThreshold = 0.7f;
 
     // detectors
     private SlideDetector leftXSlideDetector;
@@ -54,7 +63,7 @@ public class MotionDetector : MonoBehaviour
     public GameObject leftPalm;
 
     // events
-    public event EventHandler<EventArgs> slideX;
+    public event EventHandler<EventArgs> XSlide;
 
     public void Start()
     {
@@ -68,7 +77,7 @@ public class MotionDetector : MonoBehaviour
         SlideDetector.UpdateAll();
         if (leftXSlideDetector.IsDetected || rightXSlideDetector.IsDetected)
         {
-            if (slideX != null) slideX(this, EventArgs.Empty);
+            if (XSlide != null) XSlide(this, EventArgs.Empty);
         }
     }
 }

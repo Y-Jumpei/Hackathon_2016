@@ -12,12 +12,15 @@ public class MusicScorePlayer
         public float Time { get; private set; }
         public float X { get; private set; }
         public float Y { get; private set; }
+        public GameObject NoteObject { get; set; }
+        public bool IsBeated { get; set; }
 
         public Note(float time, float x, float y)
         {
             Time = time;
             X = x;
             Y = y;
+            IsBeated = false;
         }
     }
 
@@ -36,6 +39,7 @@ public class MusicScorePlayer
     private bool isPlaying = false;
 
     private int progress = 0;
+    private int skipTime = 0;
     private int currentScoreIndex = 0;
 
     public event EventHandler<MusicScoreEventArgs> NoteTiming;
@@ -49,12 +53,35 @@ public class MusicScorePlayer
         // TODO: load from file
         score = new List<Note>()
         {
-            new Note(110, 0, 0),
-            new Note(150, 0, 0),
-            new Note(200, 0, 0),
+            new Note(210, 0, 0),
             new Note(250, 0, 0),
             new Note(300, 0, 0),
+            new Note(350, 0, 0),
+            new Note(400, 0, 0),
         };
+
+    }
+
+    public Note GetNearestNote()
+    {
+        // TODO: take faster algorithm
+        Note result = null;
+        float min = float.MaxValue;
+        foreach (var note in score)
+        {
+            var distance = Math.Abs(note.Time - progress);
+            if (distance < min)
+            {
+                min = distance;
+                result = note;
+            }
+        }
+        return result;
+    }
+
+    public int GetDistanceFromProgress(Note note)
+    {
+        return (int)Math.Abs(note.Time - progress);
     }
 
     /// <summary>
@@ -67,7 +94,8 @@ public class MusicScorePlayer
             throw new InvalidOperationException("Music score already played");
         }
 
-        progress = skipTime;
+        progress = 0;
+        this.skipTime = skipTime;
         currentScoreIndex = 0;
         isPlaying = true;
     }
@@ -86,17 +114,11 @@ public class MusicScorePlayer
 
         // raise note timing event
         while (currentScoreIndex < score.Count &&
-            score[currentScoreIndex].Time < progress)
+            score[currentScoreIndex].Time < progress + skipTime)
         {
             var currentNote = score[currentScoreIndex];
             NoteTiming(this, new MusicScoreEventArgs(currentNote));
             currentScoreIndex++;
-        }
-
-        // check music ends
-        if (score.Count <= currentScoreIndex)
-        {
-            Stop();
         }
     }
 }
