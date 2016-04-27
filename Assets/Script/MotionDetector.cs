@@ -26,7 +26,7 @@ public class MotionDetector : MonoBehaviour
         private Predicate<Vector3> predicate;
         private Vector3 prevPosition;
 
-        private int detectInterval = 3;
+        private int detectInterval = 10;
         private int elapsedFromDetect = 0;
 
         public bool IsDetected { get; private set; }
@@ -45,14 +45,14 @@ public class MotionDetector : MonoBehaviour
             if (elapsedFromDetect > detectInterval)
             {
                 IsDetected = predicate(prevPosition - target.transform.position);
+                prevPosition = target.transform.position;
                 elapsedFromDetect = 0;
             }
             elapsedFromDetect += 1;
-            prevPosition = target.transform.position;
         }
     }
 
-    private float slideThreshold = 0.7f;
+    private float slideThreshold = 5.0f;
 
     // detectors
     private SlideDetector leftXSlideDetector;
