@@ -8,11 +8,11 @@ using System.Collections.Generic;
 public class MotionDetector : MonoBehaviour
 {
     /// <summary>
-    /// Component to detect slide
+    /// Base class of detectors
     /// </summary>
-    private class SlideDetector
+    private class DetectorBase
     {
-        private static List<SlideDetector> detectors = new List<SlideDetector>();
+        protected static List<SlideDetector> detectors = new List<SlideDetector>();
 
         public static void UpdateAll()
         {
@@ -22,14 +22,20 @@ public class MotionDetector : MonoBehaviour
             }
         }
 
+        public bool IsDetected { get; protected set; }
+    }
+
+    /// <summary>
+    /// Component to detect slide
+    /// </summary>
+    private class SlideDetector : DetectorBase
+    {
         private GameObject target;
         private Predicate<Vector3> predicate;
         private Vector3 prevPosition;
 
         private int detectInterval = 10;
         private int elapsedFromDetect = 0;
-
-        public bool IsDetected { get; private set; }
 
         public SlideDetector(GameObject target, Predicate<Vector3> predicate)
         {
@@ -52,11 +58,13 @@ public class MotionDetector : MonoBehaviour
         }
     }
 
-    private float slideThreshold = 5.0f;
+    private float slideThreshold = 1.0f;
 
     // detectors
     private SlideDetector leftXSlideDetector;
     private SlideDetector rightXSlideDetector;
+    private SlideDetector leftYSlideDetector;
+    private SlideDetector rightYSlideDetector;
 
     // properties
     public GameObject rightPalm;
@@ -64,12 +72,17 @@ public class MotionDetector : MonoBehaviour
 
     // events
     public event EventHandler<EventArgs> XSlide;
+    public event EventHandler<EventArgs> YSlide;
 
     public void Start()
     {
         Predicate<Vector3> xSlidePredicate = (move) => Math.Abs(move.x) > slideThreshold;
         leftXSlideDetector = new SlideDetector(leftPalm, xSlidePredicate);
         rightXSlideDetector = new SlideDetector(rightPalm, xSlidePredicate);
+
+        Predicate<Vector3> ySlidePredicate = (move) => move.y > slideThreshold;
+        leftYSlideDetector = new SlideDetector(leftPalm, ySlidePredicate);
+        rightYSlideDetector = new SlideDetector(rightPalm, ySlidePredicate);
     }
 
     public void Update()
@@ -78,6 +91,10 @@ public class MotionDetector : MonoBehaviour
         if (leftXSlideDetector.IsDetected || rightXSlideDetector.IsDetected)
         {
             if (XSlide != null) XSlide(this, EventArgs.Empty);
+        }
+        if (leftYSlideDetector.IsDetected || rightYSlideDetector.IsDetected)
+        {
+            if (YSlide != null) YSlide(this, EventArgs.Empty);
         }
     }
 }

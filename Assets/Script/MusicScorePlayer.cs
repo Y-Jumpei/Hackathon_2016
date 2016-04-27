@@ -5,21 +5,55 @@ using System.Collections.Generic;
 public class MusicScorePlayer
 {
     /// <summary>
+    /// Type of note
+    /// </summary>
+    public enum NoteType
+    {
+        Slide,
+        Chop,
+    }
+
+    /// <summary>
     /// Describe note position and timing
     /// </summary>
     public class Note
     {
+        /// <summary>
+        /// Beat timing of the note
+        /// </summary>
         public float Time { get; private set; }
+
+        /// <summary>
+        /// X coordinate of initial position
+        /// </summary>
         public float X { get; private set; }
+
+        /// <summary>
+        /// Y coordinate of initial position
+        /// </summary>
         public float Y { get; private set; }
+
+        /// <summary>
+        /// Unity object that coressponds with the note
+        /// </summary>
         public GameObject NoteObject { get; set; }
+
+        /// <summary>
+        /// Represents whether the note has already beated
+        /// </summary>
         public bool IsBeated { get; set; }
 
-        public Note(float time, float x, float y)
+        /// <summary>
+        /// Type of the note
+        /// </summary>
+        public NoteType Type { get; set; }
+
+        public Note(float time, float x, float y, NoteType type)
         {
             Time = time;
             X = x;
             Y = y;
+            Type = type;
             IsBeated = false;
         }
     }
@@ -53,11 +87,11 @@ public class MusicScorePlayer
         // TODO: load from file
         score = new List<Note>()
         {
-            new Note(210, 0, 0),
-            new Note(250, 0, 0),
-            new Note(300, 0, 0),
-            new Note(350, 0, 0),
-            new Note(400, 0, 0),
+            new Note(210, 0, 0, NoteType.Slide),
+            new Note(250, 0, 0, NoteType.Slide),
+            new Note(300, 0, 0, NoteType.Chop),
+            new Note(350, 0, 0, NoteType.Chop),
+            new Note(400, 0, 0, NoteType.Slide),
         };
 
     }

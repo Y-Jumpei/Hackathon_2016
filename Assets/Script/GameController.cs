@@ -10,15 +10,27 @@ public class GameController : MonoBehaviour
 
     private BeatPointBehavior beatPoint;
 
-    public GameObject notePrefab;
+    public GameObject slidePrefab;
+    public GameObject chopPrefab;
+
     public GameObject coolEffect;
     public GameObject goodEffect;
     public GameObject badEffect;
 
-    private void OnNoteTiming(object sender,
-        MusicScorePlayer.MusicScoreEventArgs e)
+    private void OnNoteTiming(object sender, MusicScorePlayer.MusicScoreEventArgs e)
     {
-        var note = Instantiate(notePrefab);
+        GameObject note;
+        switch (e.Note.Type)
+        {
+            case MusicScorePlayer.NoteType.Chop:
+                note = Instantiate(chopPrefab);
+                break;
+            case MusicScorePlayer.NoteType.Slide:
+                note = Instantiate(slidePrefab);
+                break;
+            default:
+                throw new InvalidOperationException("Invalid note type");
+        }
         var speed = 0.05f;
         var distance = speed * noteSkipTime;
         note.transform.position = new Vector3(e.Note.X, 0, distance);
@@ -33,15 +45,26 @@ public class GameController : MonoBehaviour
 
     private void OnXSlideDetected(object sender, EventArgs e)
     {
+        CheckTiming(MusicScorePlayer.NoteType.Slide);
+    }
+
+    private void OnYSlideDetected(object sender, EventArgs e)
+    {
+        CheckTiming(MusicScorePlayer.NoteType.Chop);
+    }
+
+    private void CheckTiming(MusicScorePlayer.NoteType noteType)
+    {
         beatPoint.Pulse();
 
         var note = player.GetNearestNote();
-        if (note != null)
+        if (note != null && noteType == note.Type)
         {
-            if (note.IsBeated) return;
+            if (note.IsBeated) return; // ignore this since the note has already beaten
+
             var distance = player.GetDistanceFromProgress(note);
             Debug.Log("Hit with distance (" + distance + ")");
-  
+
             if (distance < 5)
             {
                 var effect = Instantiate(coolEffect, note.NoteObject.transform.position, transform.rotation);
@@ -76,9 +99,12 @@ public class GameController : MonoBehaviour
         player.NoteTiming += OnNoteTiming;
         player.Play(noteSkipTime);
 
+        // setup motion detector
         var motionDetector = FindObjectOfType<MotionDetector>();
         motionDetector.XSlide += OnXSlideDetected;
+        motionDetector.YSlide += OnYSlideDetected;
 
+        // etc
         scoreController = GetComponent<ScoreController>();
         beatPoint = GameObject.Find("BeatPoint").GetComponent<BeatPointBehavior>();
     }
