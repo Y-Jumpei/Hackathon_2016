@@ -6,6 +6,8 @@ public class GameController : MonoBehaviour
     private MusicScorePlayer player = new MusicScorePlayer();
     private int noteSkipTime = 200;
 
+    private ScoreController scoreController;
+
     private BeatPointBehavior beatPoint;
 
     public GameObject notePrefab;
@@ -46,6 +48,7 @@ public class GameController : MonoBehaviour
                 Destroy(effect, 0.25f);
                 Destroy(note.NoteObject);
                 note.IsBeated = true;
+                scoreController.AddCoolCount();
             }
             else if (distance < 10)
             {
@@ -53,6 +56,7 @@ public class GameController : MonoBehaviour
                 Destroy(effect, 0.25f);
                 Destroy(note.NoteObject);
                 note.IsBeated = true;
+                scoreController.AddGoodCount();
             }
             else if (distance < 15)
             {
@@ -60,6 +64,7 @@ public class GameController : MonoBehaviour
                 Destroy(effect, 0.25f);
                 Destroy(note.NoteObject);
                 note.IsBeated = true;
+                scoreController.AddBadCount();
             }
         }
     }
@@ -74,6 +79,7 @@ public class GameController : MonoBehaviour
         var motionDetector = FindObjectOfType<MotionDetector>();
         motionDetector.XSlide += OnXSlideDetected;
 
+        scoreController = GetComponent<ScoreController>();
         beatPoint = GameObject.Find("BeatPoint").GetComponent<BeatPointBehavior>();
     }
 
