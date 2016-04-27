@@ -50,10 +50,10 @@ public class MusicScorePlayer
         score = new List<Note>()
         {
             new Note(110, 0, 0),
-            new Note(150, 4, 0),
-            new Note(200, 0, 1),
-            new Note(250, -4, 2),
-            new Note(300, -4, 0),
+            new Note(150, 0, 0),
+            new Note(200, 0, 0),
+            new Note(250, 0, 0),
+            new Note(300, 0, 0),
         };
     }
 

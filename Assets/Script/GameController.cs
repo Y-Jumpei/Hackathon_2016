@@ -10,7 +10,8 @@ public class GameController : MonoBehaviour
         MusicScorePlayer.MusicScoreEventArgs e)
     {
         var note = Instantiate(notePrefab);
-        note.transform.position = new Vector3(e.Note.X, e.Note.Y, 25);
+        note.transform.position = new Vector3(e.Note.X, 1f, 25);
+        note.transform.rotation = Quaternion.identity;
         note.name = "Note";
     }
 
