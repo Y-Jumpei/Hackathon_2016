@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour
         MusicScorePlayer.MusicScoreEventArgs e)
     {
         var note = Instantiate(notePrefab);
-        note.transform.position = new Vector3(e.Note.X, e.Note.Y, 50);
+        note.transform.position = new Vector3(e.Note.X, e.Note.Y, 25);
         note.name = "Note";
     }
 
