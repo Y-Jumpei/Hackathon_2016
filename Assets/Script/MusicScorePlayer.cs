@@ -24,12 +24,12 @@ public class MusicScorePlayer
         public float Time { get; private set; }
 
         /// <summary>
-        /// X coordinate of initial position
+        /// X coordinate of the initial position
         /// </summary>
         public float X { get; private set; }
 
         /// <summary>
-        /// Y coordinate of initial position
+        /// Y coordinate of the initial position
         /// </summary>
         public float Y { get; private set; }
 
