@@ -95,7 +95,7 @@ public class GameController : MonoBehaviour
     public void Start()
     {
         // setup music score player
-        player.Load(@"note.xml");
+        player.Load(@"Assets/MusicScores/TestMusic.xml");
         player.NoteTiming += OnNoteTiming;
         player.Play(noteSkipTime);
 

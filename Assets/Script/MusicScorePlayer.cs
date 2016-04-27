@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 public class MusicScorePlayer
 {
@@ -84,16 +85,28 @@ public class MusicScorePlayer
     /// <param name="filename"></param>
     public void Load(string filename)
     {
-        // TODO: load from file
-        score = new List<Note>()
-        {
-            new Note(210, 0, 0, NoteType.Slide),
-            new Note(250, 0, 0, NoteType.Slide),
-            new Note(300, 0, 0, NoteType.Chop),
-            new Note(350, 0, 0, NoteType.Chop),
-            new Note(400, 0, 0, NoteType.Slide),
-        };
+        score = new List<Note>();
 
+        try
+        {
+            // parse xml document
+            var document = XDocument.Load(filename);
+            var notesElement = document.Root.Descendants("notes");
+
+            foreach (var noteElement in notesElement.Descendants("note"))
+            {
+                var note = new Note(
+                    int.Parse(noteElement.Attribute("time").Value),
+                    int.Parse(noteElement.Attribute("x").Value),
+                    int.Parse(noteElement.Attribute("y").Value),
+                    (NoteType)Enum.Parse(typeof(NoteType), noteElement.Attribute("type").Value));
+                score.Add(note);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("Failed to parse score file. (" + e.Message + ")");
+        }
     }
 
     public Note GetNearestNote()
