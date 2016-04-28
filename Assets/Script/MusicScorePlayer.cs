@@ -45,16 +45,22 @@ public class MusicScorePlayer
         public bool IsBeated { get; set; }
 
         /// <summary>
+        /// Beat position
+        /// </summary>
+        public int BeatPoint { get; set; }
+
+        /// <summary>
         /// Type of the note
         /// </summary>
         public NoteType Type { get; set; }
 
-        public Note(float time, float x, float y, NoteType type)
+        public Note(float time, float x, float y, NoteType type, int beatPoint)
         {
             Time = time;
             X = x;
             Y = y;
             Type = type;
+            BeatPoint = beatPoint;
             IsBeated = false;
         }
     }
@@ -107,7 +113,8 @@ public class MusicScorePlayer
                     int.Parse(noteElement.Attribute("time").Value),
                     int.Parse(noteElement.Attribute("x").Value),
                     int.Parse(noteElement.Attribute("y").Value),
-                    (NoteType)Enum.Parse(typeof(NoteType), noteElement.Attribute("type").Value));
+                    (NoteType)Enum.Parse(typeof(NoteType), noteElement.Attribute("type").Value),
+                    int.Parse(noteElement.Attribute("point").Value));
                 score.Add(note);
             }
         }

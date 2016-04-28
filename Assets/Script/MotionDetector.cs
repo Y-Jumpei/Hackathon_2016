@@ -93,22 +93,24 @@ public class MotionDetector : MonoBehaviour
     public bool PalmIsInCenter { get; set; }
     public bool PalmIsInRight { get; set; }
 
+    private const float outerThreshold = 3.0f;
+
     private bool GetPalmIsInLeft(GameObject palm)
     {
         var p = palm.transform.position;
-        return -2.0 < p.z && p.z < 2.0  && -2.0 < p.x && p.x < -0.75;
+        return -outerThreshold < p.z && p.z < outerThreshold && -outerThreshold < p.x && p.x < -0.75;
     }
 
     private bool GetPalmIsInCenter(GameObject palm)
     {
         var p = palm.transform.position;
-        return -2.0 < p.z && p.z < 2.0 && -0.75 < p.x && p.x < 0.75;
+        return -outerThreshold < p.z && p.z < outerThreshold && -0.75 < p.x && p.x < 0.75;
     }
 
     private bool GetPalmIsInRight(GameObject palm)
     {
         var p = palm.transform.position;
-        return -2.0 < p.z && p.z < 2.0 && 0.75 < p.x && p.x < 2.0;
+        return -outerThreshold < p.z && p.z < outerThreshold && 0.75 < p.x && p.x < outerThreshold;
     }
 
     private int GetBeatPointFromPalm(GameObject palm)

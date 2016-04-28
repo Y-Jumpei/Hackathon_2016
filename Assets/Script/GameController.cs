@@ -66,7 +66,7 @@ public class GameController : MonoBehaviour
         }
 
         var note = player.GetNearestNote();
-        if (note != null && noteType == note.Type)
+        if (note != null && noteType == note.Type && beatPoint == note.BeatPoint)
         {
             if (note.IsBeated) return; // ignore this since the note has already beaten
 
