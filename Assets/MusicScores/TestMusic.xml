@@ -1,11 +1,11 @@
 <musicScore>
   <title>TestMusic1</title>
   <notes>
-    <note x="0" y="0" time="210" type="Slide"></note>
-    <note x="0" y="0" time="260" type="Slide"></note>
-    <note x="0" y="0" time="300" type="Slide"></note>
-    <note x="0" y="0" time="330" type="Slide"></note>
-    <note x="0" y="0" time="350" type="Slide"></note>
-    <note x="0" y="0" time="390" type="Slide"></note>
+    <note x="0" y="0" time="200" type="Slide"></note>
+    <note x="0" y="0" time="238" type="Slide"></note>
+    <note x="0" y="0" time="298" type="Slide"></note>
+    <note x="0" y="0" time="347" type="Slide"></note>
+    <note x="0" y="0" time="400" type="Slide"></note>
+    <note x="0" y="0" time="441" type="Slide"></note>
   </notes>
 </musicScore>

@@ -77,6 +77,14 @@ public class MusicScorePlayer
     private int skipTime = 0;
     private int currentScoreIndex = 0;
 
+    /// <summary>
+    /// Gets current progress
+    /// </summary>
+    public int Progress { get { return progress; } }
+
+    /// <summary>
+    /// Raised on note creation timing
+    /// </summary>
     public event EventHandler<MusicScoreEventArgs> NoteTiming;
 
     /// <summary>

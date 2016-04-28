@@ -124,7 +124,7 @@ public class GameController : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
-            OnXSlideDetected(this, EventArgs.Empty);
+            Debug.Log("A pressed at prograss " + player.Progress);
         }
     }
 }
