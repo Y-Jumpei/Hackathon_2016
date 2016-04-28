@@ -2,6 +2,16 @@
 using System;
 using System.Collections.Generic;
 
+public class MotionDetectEventArgs : EventArgs
+{
+    public int BeatPoint { get; private set; }
+
+    public MotionDetectEventArgs(int beatPoint)
+    {
+        BeatPoint = beatPoint;
+    }
+}
+
 /// <summary>
 /// Detect hand motion
 /// </summary>
@@ -58,6 +68,9 @@ public class MotionDetector : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Threshold of finger movement distance, to detect slide
+    /// </summary>
     private float slideThreshold = 1.0f;
 
     // detectors
@@ -66,35 +79,92 @@ public class MotionDetector : MonoBehaviour
     private SlideDetector leftYSlideDetector;
     private SlideDetector rightYSlideDetector;
 
-    // properties
-    public GameObject rightPalm;
+    // game objects
+    public GameObject leftFinger;
+    public GameObject rightFinger;
     public GameObject leftPalm;
+    public GameObject rightPalm;
 
     // events
-    public event EventHandler<EventArgs> XSlide;
-    public event EventHandler<EventArgs> YSlide;
+    public event EventHandler<MotionDetectEventArgs> XSlide;
+    public event EventHandler<MotionDetectEventArgs> YSlide;
+
+    public bool PalmIsInLeft { get; set; }
+    public bool PalmIsInCenter { get; set; }
+    public bool PalmIsInRight { get; set; }
+
+    private bool GetPalmIsInLeft(GameObject palm)
+    {
+        var p = palm.transform.position;
+        return -2.0 < p.z && p.z < 2.0  && -2.0 < p.x && p.x < -0.75;
+    }
+
+    private bool GetPalmIsInCenter(GameObject palm)
+    {
+        var p = palm.transform.position;
+        return -2.0 < p.z && p.z < 2.0 && -0.75 < p.x && p.x < 0.75;
+    }
+
+    private bool GetPalmIsInRight(GameObject palm)
+    {
+        var p = palm.transform.position;
+        return -2.0 < p.z && p.z < 2.0 && 0.75 < p.x && p.x < 2.0;
+    }
+
+    private int GetBeatPointFromPalm(GameObject palm)
+    {
+        if (GetPalmIsInLeft(palm))
+            return 0;
+        else if (GetPalmIsInCenter(palm))
+            return 1;
+        else if (GetPalmIsInRight(palm))
+            return 2;
+        else
+            return 3;
+    }
 
     public void Start()
     {
         Predicate<Vector3> xSlidePredicate = (move) => Math.Abs(move.x) > slideThreshold;
-        leftXSlideDetector = new SlideDetector(leftPalm, xSlidePredicate);
-        rightXSlideDetector = new SlideDetector(rightPalm, xSlidePredicate);
+        leftXSlideDetector = new SlideDetector(leftFinger, xSlidePredicate);
+        rightXSlideDetector = new SlideDetector(rightFinger, xSlidePredicate);
 
         Predicate<Vector3> ySlidePredicate = (move) => move.y > slideThreshold;
-        leftYSlideDetector = new SlideDetector(leftPalm, ySlidePredicate);
-        rightYSlideDetector = new SlideDetector(rightPalm, ySlidePredicate);
+        leftYSlideDetector = new SlideDetector(leftFinger, ySlidePredicate);
+        rightYSlideDetector = new SlideDetector(rightFinger, ySlidePredicate);
     }
 
     public void Update()
     {
-        SlideDetector.UpdateAll();
-        if (leftXSlideDetector.IsDetected || rightXSlideDetector.IsDetected)
+        DetectorBase.UpdateAll();
+
+        if (XSlide != null)
         {
-            if (XSlide != null) XSlide(this, EventArgs.Empty);
+            if (leftXSlideDetector.IsDetected)
+            {
+                XSlide(this, new MotionDetectEventArgs(GetBeatPointFromPalm(leftPalm)));
+            }
+            if (rightXSlideDetector.IsDetected)
+            {
+                XSlide(this, new MotionDetectEventArgs(GetBeatPointFromPalm(rightPalm)));
+            }
         }
-        if (leftYSlideDetector.IsDetected || rightYSlideDetector.IsDetected)
+
+        if (YSlide != null)
         {
-            if (YSlide != null) YSlide(this, EventArgs.Empty);
+            if (leftYSlideDetector.IsDetected)
+            {
+                YSlide(this, new MotionDetectEventArgs(GetBeatPointFromPalm(leftPalm)));
+            }
+            if (rightYSlideDetector.IsDetected)
+            {
+                YSlide(this, new MotionDetectEventArgs(GetBeatPointFromPalm(rightPalm)));
+            }
         }
+
+        // detect position
+        PalmIsInLeft = GetPalmIsInLeft(leftPalm) || GetPalmIsInLeft(rightPalm);
+        PalmIsInCenter = GetPalmIsInCenter(leftPalm) || GetPalmIsInCenter(rightPalm);
+        PalmIsInRight = GetPalmIsInRight(leftPalm) || GetPalmIsInRight(rightPalm);
     }
 }

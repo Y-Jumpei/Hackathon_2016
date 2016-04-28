@@ -6,9 +6,12 @@ public class GameController : MonoBehaviour
     private MusicScorePlayer player = new MusicScorePlayer();
     private int noteSkipTime = 200;
 
+    private MotionDetector motionDetector;
     private ScoreController scoreController;
 
-    private BeatPointBehavior beatPoint;
+    private BeatPointBehavior leftBeatPoint;
+    private BeatPointBehavior centerBeatPoint;
+    private BeatPointBehavior rightBeatPoint;
 
     public GameObject slidePrefab;
     public GameObject chopPrefab;
@@ -43,19 +46,24 @@ public class GameController : MonoBehaviour
         e.Note.NoteObject = note;
     }
 
-    private void OnXSlideDetected(object sender, EventArgs e)
+    private void OnXSlideDetected(object sender, MotionDetectEventArgs e)
     {
-        CheckTiming(MusicScorePlayer.NoteType.Slide);
+        CheckTiming(MusicScorePlayer.NoteType.Slide, e.BeatPoint);
     }
 
-    private void OnYSlideDetected(object sender, EventArgs e)
+    private void OnYSlideDetected(object sender, MotionDetectEventArgs e)
     {
-        CheckTiming(MusicScorePlayer.NoteType.Chop);
+        CheckTiming(MusicScorePlayer.NoteType.Chop, e.BeatPoint);
     }
 
-    private void CheckTiming(MusicScorePlayer.NoteType noteType)
+    private void CheckTiming(MusicScorePlayer.NoteType noteType, int beatPoint)
     {
-        beatPoint.Pulse();
+        switch (beatPoint)
+        {
+            case 0: leftBeatPoint.Pulse(); break;
+            case 1: centerBeatPoint.Pulse(); break;
+            case 2: rightBeatPoint.Pulse(); break;
+        }
 
         var note = player.GetNearestNote();
         if (note != null && noteType == note.Type)
@@ -100,18 +108,40 @@ public class GameController : MonoBehaviour
         player.Play(noteSkipTime);
 
         // setup motion detector
-        var motionDetector = FindObjectOfType<MotionDetector>();
+        motionDetector = FindObjectOfType<MotionDetector>();
         motionDetector.XSlide += OnXSlideDetected;
         motionDetector.YSlide += OnYSlideDetected;
 
+        // set beat point objects
+        leftBeatPoint = GameObject.Find("LeftBeatPoint").GetComponent<BeatPointBehavior>();
+        centerBeatPoint = GameObject.Find("CenterBeatPoint").GetComponent<BeatPointBehavior>();
+        rightBeatPoint = GameObject.Find("RightBeatPoint").GetComponent<BeatPointBehavior>();
+
         // etc
         scoreController = GetComponent<ScoreController>();
-        beatPoint = GameObject.Find("BeatPoint").GetComponent<BeatPointBehavior>();
     }
 
     public void Update()
     {
         player.Update();
+
+        // activate beat point
+        leftBeatPoint.Inactivate();
+        centerBeatPoint.Inactivate();
+        rightBeatPoint.Inactivate();
+        if (motionDetector.PalmIsInLeft)
+        {
+            leftBeatPoint.Activate();
+        }
+        if (motionDetector.PalmIsInCenter)
+        {
+            centerBeatPoint.Activate();
+        }
+        if (motionDetector.PalmIsInRight)
+        {
+            rightBeatPoint.Activate();
+        }
+
 
         // handle key inputs
         if (Input.GetKeyDown(KeyCode.Space))
