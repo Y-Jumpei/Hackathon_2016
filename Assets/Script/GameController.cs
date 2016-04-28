@@ -103,7 +103,16 @@ public class GameController : MonoBehaviour
     public void Start()
     {
         // setup music score player
-        player.Load(@"Assets/MusicScores/TestMusic.xml");
+        var path = "";
+        if (Application.isEditor)
+        {
+            path = Application.dataPath + @"/MusicScores/TestMusic.xml"; //エディタの場合, Application.dataPathは'Asset'フォルダ
+        }
+        else {
+            path = Application.dataPath + "/.." + @"/MusicScores/TestMusic.xml";    //PC/Macの場合,Application.dataPathは、'実行ファイル_data'フォルダ
+
+        }
+        player.Load(path);
         player.NoteTiming += OnNoteTiming;
         player.Play(noteSkipTime);
 
@@ -158,7 +167,7 @@ public class GameController : MonoBehaviour
         }
 
         // autoplay
-        if (true)
+        if (false)
         {
             var _note = player.GetNearestNote();
             var distance = player.GetDistanceFromProgress(_note);

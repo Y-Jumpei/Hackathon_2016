@@ -101,6 +101,23 @@ public class MusicScorePlayer
     {
         score = new List<Note>();
 
+        score.Add(new Note(227, -2, 0, NoteType.Chop, 0));
+        score.Add(new Note(275, -2, 0, NoteType.Chop, 0));
+        score.Add(new Note(327, -2, 0, NoteType.Chop, 0));
+        score.Add(new Note(350, 0, 0, NoteType.Chop, 1));
+        score.Add(new Note(375, 0, 0, NoteType.Chop, 1));
+        score.Add(new Note(426, 2, 0, NoteType.Chop, 2));
+        score.Add(new Note(475, -2, 0, NoteType.Chop, 0));
+        score.Add(new Note(525, -2, 0, NoteType.Chop, 0));
+        score.Add(new Note(576, -2, 0, NoteType.Chop, 0));
+        score.Add(new Note(625, 0, 0, NoteType.Chop, 1));
+        score.Add(new Note(674, 0, 0, NoteType.Chop, 1));
+        score.Add(new Note(722, 2, 0, NoteType.Slide, 2));
+        score.Add(new Note(746, 0, 0, NoteType.Slide, 1));
+        score.Add(new Note(769, 2, 0, NoteType.Slide, 2));
+
+        return;
+
         try
         {
             // parse xml document
