@@ -156,5 +156,21 @@ public class GameController : MonoBehaviour
         {
             Debug.Log("A pressed at prograss " + player.Progress);
         }
+
+        // autoplay
+        if (true)
+        {
+            var _note = player.GetNearestNote();
+            var distance = player.GetDistanceFromProgress(_note);
+            if (distance < 1 && !_note.IsBeated)
+            {
+                Debug.Log("A pressed at prograss " + player.Progress);
+                var effect = Instantiate(coolEffect, _note.NoteObject.transform.position, transform.rotation);
+                Destroy(effect, 0.25f);
+                Destroy(_note.NoteObject);
+                _note.IsBeated = true;
+                scoreController.AddCoolCount();
+            }
+        }
     }
 }
