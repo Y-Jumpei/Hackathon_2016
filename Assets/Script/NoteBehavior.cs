@@ -16,5 +16,11 @@ public class NoteBehavior : MonoBehaviour
     void Update()
     {
         Move(Speed);
+
+        // Destroy itself
+        if (transform.position.z < -10)
+        {
+            Destroy(gameObject);
+        }
     }
 }
