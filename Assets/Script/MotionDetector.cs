@@ -69,7 +69,7 @@ public class MotionDetector : MonoBehaviour
     }
 
     /// <summary>
-    /// Threshold of finger movement distance, to detect slide
+    /// Threshold of finger movement distance, to detect slide motion
     /// </summary>
     private float slideThreshold = 1.0f;
 

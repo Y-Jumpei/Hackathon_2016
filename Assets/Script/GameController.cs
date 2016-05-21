@@ -104,16 +104,7 @@ public class GameController : MonoBehaviour
     public void Start()
     {
         // setup music score player
-        var path = "";
-        if (Application.isEditor)
-        {
-            path = Application.dataPath + @"/MusicScores/TestMusic.xml"; //エディタの場合, Application.dataPathは'Asset'フォルダ
-        }
-        else {
-            path = Application.dataPath + "/.." + @"/MusicScores/TestMusic.xml";    //PC/Macの場合,Application.dataPathは、'実行ファイル_data'フォルダ
-
-        }
-        player.Load(path);
+        player.Load("TestMusic");
         player.NoteTiming += OnNoteTiming;
         player.Play(noteSkipTime);
 
