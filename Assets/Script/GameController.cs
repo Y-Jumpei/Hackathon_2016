@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -155,7 +156,7 @@ public class GameController : MonoBehaviour
         // handle key inputs
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Application.LoadLevel("Title");
+            SceneManager.LoadScene("Title");
         }
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
