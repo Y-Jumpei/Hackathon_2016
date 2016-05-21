@@ -14,6 +14,8 @@ public class GameController : MonoBehaviour
     private BeatPointBehavior centerBeatPoint;
     private BeatPointBehavior rightBeatPoint;
 
+    private bool isAutoPlayMode = false;
+
     public GameObject slidePrefab;
     public GameObject chopPrefab;
 
@@ -158,14 +160,20 @@ public class GameController : MonoBehaviour
             Debug.Log("A pressed at prograss " + player.Progress);
         }
 
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            isAutoPlayMode = !isAutoPlayMode;
+            Debug.Log("AutoPlay " + (isAutoPlayMode ? "enabled" : "disabled"));
+        }
+
         // autoplay
-        if (false)
+        if (isAutoPlayMode)
         {
             var _note = player.GetNearestNote();
             var distance = player.GetDistanceFromProgress(_note);
             if (distance < 1 && !_note.IsBeated)
             {
-                Debug.Log("A pressed at prograss " + player.Progress);
+                Debug.Log("AutoPlay beats at prograss " + player.Progress);
                 var effect = Instantiate(coolEffect, _note.NoteObject.transform.position, transform.rotation);
                 Destroy(effect, 0.25f);
                 Destroy(_note.NoteObject);
