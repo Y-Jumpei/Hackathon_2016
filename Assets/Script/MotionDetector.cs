@@ -93,6 +93,9 @@ public class MotionDetector : MonoBehaviour
     public bool PalmIsInCenter { get; set; }
     public bool PalmIsInRight { get; set; }
 
+    public float LeftPalmPosition { get { return leftPalm.transform.position.x; } }
+    public float RightPalmPosition { get { return rightPalm.transform.position.x; } }
+
     private const float outerThreshold = 3.0f;
 
     private bool GetPalmIsInLeft(GameObject palm)
