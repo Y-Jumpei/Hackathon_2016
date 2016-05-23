@@ -6,7 +6,7 @@ public class NoteBehavior : MonoBehaviour
 
     private void Move(float distance)
     {
-        transform.Translate(0, 0, -Speed);
+        transform.Translate(0, 0, -Speed, Space.World);
     }
 
     void Start()

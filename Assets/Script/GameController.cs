@@ -16,8 +16,7 @@ public class GameController : MonoBehaviour
 
     private bool isAutoPlayMode = false;
 
-    public GameObject slidePrefab;
-    public GameObject chopPrefab;
+    public GameObject notePrefab;
 
     public GameObject coolEffect;
     public GameObject goodEffect;
@@ -25,23 +24,23 @@ public class GameController : MonoBehaviour
 
     private void OnNoteTiming(object sender, MusicScorePlayer.MusicScoreEventArgs e)
     {
-        GameObject note;
+        GameObject note = Instantiate(notePrefab);
+        var speed = 0.05f;
+        var distance = speed * noteSkipTime;
+        note.name = "Note";
+        note.transform.position = new Vector3(e.Note.X, 0, distance);
+
         switch (e.Note.Type)
         {
             case MusicScorePlayer.NoteType.Chop:
-                note = Instantiate(chopPrefab);
+                note.transform.rotation = Quaternion.Euler(0, 0, 90);
                 break;
             case MusicScorePlayer.NoteType.Slide:
-                note = Instantiate(slidePrefab);
+                note.transform.rotation = Quaternion.Euler(0, 0, 0);
                 break;
             default:
                 throw new InvalidOperationException("Invalid note type");
         }
-        var speed = 0.05f;
-        var distance = speed * noteSkipTime;
-        note.transform.position = new Vector3(e.Note.X, 0, distance);
-        note.transform.rotation = Quaternion.identity;
-        note.name = "Note";
 
         var noteBehavior = note.GetComponent<NoteBehavior>();
         noteBehavior.Speed = speed;
