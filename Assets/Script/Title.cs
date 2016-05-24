@@ -1,13 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Title : MonoBehaviour {
-
-
-
 	void FixedUpdate(){
 		if (Input.anyKeyDown) {
-			Application.LoadLevel ("Game");
+			SceneManager.LoadScene("Game");
 		}
 	}
 

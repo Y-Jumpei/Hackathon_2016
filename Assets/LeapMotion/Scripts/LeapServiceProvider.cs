@@ -138,8 +138,8 @@ namespace Leap.Unity {
       Int64 unityTime = (Int64)(Time.time);
       clockCorrelator.UpdateRebaseEstimate(unityTime);
 
-      Int64 unityFrameTime = (Int64)(CurrentFrame.Timestamp - _initialFrameOffset);
-      Int64 LeapFrameTime = clockCorrelator.ExternalClockToLeapTime(unityFrameTime);
+      //Int64 unityFrameTime = (Int64)(CurrentFrame.Timestamp - _initialFrameOffset);
+      //Int64 LeapFrameTime = clockCorrelator.ExternalClockToLeapTime(unityFrameTime);
  
       if (_perFrameFixedUpdateOffset > 0) {
         _smoothedFixedUpdateOffset.Update(_perFrameFixedUpdateOffset, Time.deltaTime);

@@ -1,0 +1,19 @@
+<musicScore>
+  <title>TestMusic1</title>
+  <notes>
+    <note x="-2" y="0" time="227" type="Chop" point="0"></note>
+    <note x="-2" y="0" time="275" type="Chop" point="0"></note>
+    <note x="-2" y="0" time="327" type="Chop" point="0"></note>
+    <note x="0" y="0" time="350" type="Chop" point="2"></note>
+    <note x="0" y="0" time="375" type="Chop" point="1"></note>
+    <note x="-2" y="0" time="426" type="Chop" point="0"></note>
+    <note x="-2" y="0" time="475" type="Chop" point="0"></note>
+    <note x="-2" y="0" time="525" type="Chop" point="0"></note>
+    <note x="0" y="0" time="576" type="Chop" point="2"></note>
+    <note x="0" y="0" time="625" type="Chop" point="1"></note>
+    <note x="-2" y="0" time="674" type="Chop" point="0"></note>
+    <note x="-2" y="0" time="722" type="Slide" point="0"></note>
+    <note x="-2" y="0" time="746" type="Slide" point="0"></note>
+    <note x="0" y="0" time="769" type="Slide" point="2"></note>
+  </notes>
+</musicScore>
