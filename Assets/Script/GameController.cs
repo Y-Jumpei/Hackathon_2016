@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    private readonly float noteSpeed = 0.1f;
+    private readonly float noteSpeed = 0.3f;
 
     private MusicScore musicScore = new MusicScore();
     private MusicScorePlayerBehavior player;
@@ -107,20 +107,20 @@ public class GameController : MonoBehaviour
         player.UpdateNotes(musicScore, noteSpeed);
 
         // activate beat point
-        leftBeatPoint.Inactivate();
-        centerBeatPoint.Inactivate();
-        rightBeatPoint.Inactivate();
+        //leftBeatPoint.Inactivate();
+        //centerBeatPoint.Inactivate();
+        //rightBeatPoint.Inactivate();
         if (motionDetector.PalmIsInLeft)
         {
-            leftBeatPoint.Activate();
+            //leftBeatPoint.Activate();
         }
         if (motionDetector.PalmIsInCenter)
         {
-            centerBeatPoint.Activate();
+            //centerBeatPoint.Activate();
         }
         if (motionDetector.PalmIsInRight)
         {
-            rightBeatPoint.Activate();
+            //rightBeatPoint.Activate();
         }
 
         // handle key inputs
