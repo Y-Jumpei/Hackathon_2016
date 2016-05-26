@@ -2,12 +2,8 @@
 
 public class BeatPointBehavior : MonoBehaviour
 {
-    private float scale = 0.3f;
-
     private MeshRenderer meshRenderer;
 
-    public float defaultScale = 0.3f;
-    public float pulsedScale = 0.8f;
     public int activatedCount = 0;
 
     public Material activeMaterial;
@@ -15,7 +11,6 @@ public class BeatPointBehavior : MonoBehaviour
 
     public void Pulse()
     {
-        scale = pulsedScale;
         activatedCount = 10;
         Activate();
     }
@@ -44,10 +39,5 @@ public class BeatPointBehavior : MonoBehaviour
             activatedCount = 0;
             Inactivate();
         }
-        //if (scale >= defaultScale)
-        //{
-        //    transform.localScale = new Vector3(scale, transform.localScale.y, scale);
-        //    scale -= 0.05f;
-        //}
     }
 }
