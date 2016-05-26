@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour
 
     public GameObject notePrefab;
 
+    public GameObject comboText;
+
     public GameObject coolEffect;
     public GameObject goodEffect;
     public GameObject badEffect;
@@ -46,35 +48,57 @@ public class GameController : MonoBehaviour
         var note = musicScore.GetNearestNote(player.Progress);
         if (note != null && noteType == note.Type && beatPoint == note.BeatPoint)
         {
-            if (note.IsBeated) return; // ignore this since the note has already beaten
+            BeatNote(note);
+        }
+    }
 
-            var distance = player.GetDistanceFromProgress(note);
-            Debug.Log("Hit with distance (" + distance + ")");
+    private void BeatNote(Note note)
+    {
+        if (note.IsBeated) return; // ignore this since the note has already beaten
 
-            if (distance < 5)
-            {
-                var effect = Instantiate(coolEffect, note.NoteObject.transform.position, transform.rotation);
-                Destroy(effect, 0.25f);
-                Destroy(note.NoteObject);
-                note.IsBeated = true;
-                scoreController.AddCoolCount();
-            }
-            else if (distance < 10)
-            {
-                var effect = Instantiate(goodEffect, note.NoteObject.transform.position, transform.rotation);
-                Destroy(effect, 0.25f);
-                Destroy(note.NoteObject);
-                note.IsBeated = true;
-                scoreController.AddGoodCount();
-            }
-            else if (distance < 15)
-            {
-                var effect = Instantiate(badEffect, note.NoteObject.transform.position, transform.rotation);
-                Destroy(effect, 0.25f);
-                Destroy(note.NoteObject);
-                note.IsBeated = true;
-                scoreController.AddBadCount();
-            }
+        var distance = player.GetDistanceFromProgress(note);
+        Debug.Log("Hit with distance (" + distance + ")");
+
+        if (distance < 5)
+        {
+            var effect = Instantiate(coolEffect, note.NoteObject.transform.position, transform.rotation);
+            Destroy(effect, 0.25f);
+            scoreController.AddCoolCount();
+        }
+        else if (distance < 10)
+        {
+            var effect = Instantiate(goodEffect, note.NoteObject.transform.position, transform.rotation);
+            Destroy(effect, 0.25f);
+            scoreController.AddGoodCount();
+        }
+        else if (distance < 15)
+        {
+            var effect = Instantiate(badEffect, note.NoteObject.transform.position, transform.rotation);
+            Destroy(effect, 0.25f);
+            scoreController.AddBadCount();
+        }
+
+        if (distance < 15)
+        {
+            Destroy(note.NoteObject);
+            note.IsBeated = true;
+            scoreController.AddCombo();
+        }
+        else
+        {
+            scoreController.ResetCombo();
+        }
+
+        // update combo text
+        var comboTextMesh = comboText.GetComponent<TextMesh>();
+        if (scoreController.Combo < 3)
+        {
+            comboTextMesh.text = "";
+        }
+        else
+        {
+            comboTextMesh.text = "COMBO\n" + scoreController.Combo;
+            comboText.GetComponent<ShakeAnimationBehavior>().Play();
         }
     }
 
@@ -106,23 +130,6 @@ public class GameController : MonoBehaviour
         // update notes
         player.UpdateNotes(musicScore, noteSpeed);
 
-        // activate beat point
-        //leftBeatPoint.Inactivate();
-        //centerBeatPoint.Inactivate();
-        //rightBeatPoint.Inactivate();
-        if (motionDetector.PalmIsInLeft)
-        {
-            //leftBeatPoint.Activate();
-        }
-        if (motionDetector.PalmIsInCenter)
-        {
-            //centerBeatPoint.Activate();
-        }
-        if (motionDetector.PalmIsInRight)
-        {
-            //rightBeatPoint.Activate();
-        }
-
         // handle key inputs
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -151,11 +158,7 @@ public class GameController : MonoBehaviour
             if (distance < 1 && !_note.IsBeated)
             {
                 Debug.Log("AutoPlay beats at prograss " + player.Progress);
-                var effect = Instantiate(coolEffect, _note.NoteObject.transform.position, transform.rotation);
-                Destroy(effect, 0.25f);
-                Destroy(_note.NoteObject);
-                _note.IsBeated = true;
-                scoreController.AddCoolCount();
+                BeatNote(_note);
             }
         }
     }

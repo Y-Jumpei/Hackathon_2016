@@ -14,6 +14,8 @@ public class ScoreController : MonoBehaviour
     public Text goodText;
     public Text badText;
 
+    public int Combo { get; private set; }
+
     /// <summary>
     /// Set counts to text UI components
     /// </summary>
@@ -27,6 +29,7 @@ public class ScoreController : MonoBehaviour
     public void Start()
     {
         Render();
+        Combo = 0;
     }
 
     public void AddCoolCount()
@@ -45,5 +48,15 @@ public class ScoreController : MonoBehaviour
     {
         badCount += 1;
         Render();
+    }
+
+    public void ResetCombo()
+    {
+        Combo = 0;
+    }
+
+    public void AddCombo()
+    {
+        Combo += 1;
     }
 }
