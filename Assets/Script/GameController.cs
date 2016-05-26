@@ -52,6 +52,21 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private void HandleMissedNote()
+    {
+        foreach (var note in musicScore.Notes)
+        {
+            if (!note.IsBeated && note.Time < player.Progress - 20)
+            {
+                note.IsBeated = true;
+                Destroy(note.NoteObject);
+                scoreController.ResetCombo();
+                var comboTextMesh = comboText.GetComponent<TextMesh>();
+                comboTextMesh.text = "";
+            }
+        }
+    }
+
     private void BeatNote(Note note)
     {
         if (note.IsBeated) return; // ignore this since the note has already beaten
@@ -129,6 +144,7 @@ public class GameController : MonoBehaviour
     {
         // update notes
         player.UpdateNotes(musicScore, noteSpeed);
+        HandleMissedNote();
 
         // handle key inputs
         if (Input.GetKeyDown(KeyCode.Space))
