@@ -4,8 +4,10 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    private MusicScorePlayer player = new MusicScorePlayer();
-    private int noteSkipTime = 200;
+    private readonly float noteSpeed = 0.1f;
+
+    private MusicScore musicScore = new MusicScore();
+    private MusicScorePlayerBehavior player;
 
     private MotionDetector motionDetector;
     private ScoreController scoreController;
@@ -22,43 +24,17 @@ public class GameController : MonoBehaviour
     public GameObject goodEffect;
     public GameObject badEffect;
 
-    private void OnNoteTiming(object sender, MusicScorePlayer.MusicScoreEventArgs e)
-    {
-        GameObject note = Instantiate(notePrefab);
-        var speed = 0.05f;
-        var distance = speed * noteSkipTime;
-        note.name = "Note";
-        note.transform.position = new Vector3(e.Note.X, 0, distance);
-
-        switch (e.Note.Type)
-        {
-            case MusicScorePlayer.NoteType.Chop:
-                note.transform.rotation = Quaternion.Euler(0, 0, 90);
-                break;
-            case MusicScorePlayer.NoteType.Slide:
-                note.transform.rotation = Quaternion.Euler(0, 0, 0);
-                break;
-            default:
-                throw new InvalidOperationException("Invalid note type");
-        }
-
-        var noteBehavior = note.GetComponent<NoteBehavior>();
-        noteBehavior.Speed = speed;
-
-        e.Note.NoteObject = note;
-    }
-
     private void OnXSlideDetected(object sender, MotionDetectEventArgs e)
     {
-        CheckTiming(MusicScorePlayer.NoteType.Slide, e.BeatPoint);
+        CheckTiming(Note.NoteType.Slide, e.BeatPoint);
     }
 
     private void OnYSlideDetected(object sender, MotionDetectEventArgs e)
     {
-        CheckTiming(MusicScorePlayer.NoteType.Chop, e.BeatPoint);
+        CheckTiming(Note.NoteType.Chop, e.BeatPoint);
     }
 
-    private void CheckTiming(MusicScorePlayer.NoteType noteType, int beatPoint)
+    private void CheckTiming(Note.NoteType noteType, int beatPoint)
     {
         switch (beatPoint)
         {
@@ -67,7 +43,7 @@ public class GameController : MonoBehaviour
             case 2: rightBeatPoint.Pulse(); break;
         }
 
-        var note = player.GetNearestNote();
+        var note = musicScore.GetNearestNote(player.Progress);
         if (note != null && noteType == note.Type && beatPoint == note.BeatPoint)
         {
             if (note.IsBeated) return; // ignore this since the note has already beaten
@@ -104,10 +80,10 @@ public class GameController : MonoBehaviour
 
     public void Start()
     {
-        // setup music score player
-        player.Load("TestMusic");
-        player.NoteTiming += OnNoteTiming;
-        player.Play(noteSkipTime);
+        // setup music score and player
+        musicScore.Load("TestMusic");
+        player = GetComponent<MusicScorePlayerBehavior>();
+        player.SetupNotes(musicScore, notePrefab);
 
         // setup motion detector
         motionDetector = FindObjectOfType<MotionDetector>();
@@ -121,11 +97,14 @@ public class GameController : MonoBehaviour
 
         // etc
         scoreController = GetComponent<ScoreController>();
+
+        player.Play();
     }
 
     public void Update()
     {
-        player.Update();
+        // update notes
+        player.UpdateNotes(musicScore, noteSpeed);
 
         // activate beat point
         leftBeatPoint.Inactivate();
@@ -143,7 +122,6 @@ public class GameController : MonoBehaviour
         {
             rightBeatPoint.Activate();
         }
-
 
         // handle key inputs
         if (Input.GetKeyDown(KeyCode.Space))
@@ -168,7 +146,7 @@ public class GameController : MonoBehaviour
         // autoplay
         if (isAutoPlayMode)
         {
-            var _note = player.GetNearestNote();
+            var _note = musicScore.GetNearestNote(player.Progress);
             var distance = player.GetDistanceFromProgress(_note);
             if (distance < 1 && !_note.IsBeated)
             {
