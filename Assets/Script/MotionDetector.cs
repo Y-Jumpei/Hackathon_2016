@@ -44,7 +44,7 @@ public class MotionDetector : MonoBehaviour
         private Predicate<Vector3> predicate;
         private Vector3 prevPosition;
 
-        private int detectInterval = 10;
+        private int detectInterval = 3;
         private int elapsedFromDetect = 0;
 
         public SlideDetector(GameObject target, Predicate<Vector3> predicate)
@@ -71,7 +71,7 @@ public class MotionDetector : MonoBehaviour
     /// <summary>
     /// Threshold of finger movement distance, to detect slide motion
     /// </summary>
-    private float slideThreshold = 1.0f;
+    private float slideThreshold = 0.8f;
 
     // detectors
     private SlideDetector leftXSlideDetector;

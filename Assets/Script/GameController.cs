@@ -4,8 +4,10 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    private MusicScorePlayer player = new MusicScorePlayer();
-    private int noteSkipTime = 200;
+    private readonly float noteSpeed = 0.3f;
+
+    private MusicScore musicScore = new MusicScore();
+    private MusicScorePlayerBehavior player;
 
     private MotionDetector motionDetector;
     private ScoreController scoreController;
@@ -18,47 +20,23 @@ public class GameController : MonoBehaviour
 
     public GameObject notePrefab;
 
+    public GameObject comboText;
+
     public GameObject coolEffect;
     public GameObject goodEffect;
     public GameObject badEffect;
 
-    private void OnNoteTiming(object sender, MusicScorePlayer.MusicScoreEventArgs e)
-    {
-        GameObject note = Instantiate(notePrefab);
-        var speed = 0.05f;
-        var distance = speed * noteSkipTime;
-        note.name = "Note";
-        note.transform.position = new Vector3(e.Note.X, 0, distance);
-
-        switch (e.Note.Type)
-        {
-            case MusicScorePlayer.NoteType.Chop:
-                note.transform.rotation = Quaternion.Euler(0, 0, 90);
-                break;
-            case MusicScorePlayer.NoteType.Slide:
-                note.transform.rotation = Quaternion.Euler(0, 0, 0);
-                break;
-            default:
-                throw new InvalidOperationException("Invalid note type");
-        }
-
-        var noteBehavior = note.GetComponent<NoteBehavior>();
-        noteBehavior.Speed = speed;
-
-        e.Note.NoteObject = note;
-    }
-
     private void OnXSlideDetected(object sender, MotionDetectEventArgs e)
     {
-        CheckTiming(MusicScorePlayer.NoteType.Slide, e.BeatPoint);
+        CheckTiming(Note.NoteType.Slide, e.BeatPoint);
     }
 
     private void OnYSlideDetected(object sender, MotionDetectEventArgs e)
     {
-        CheckTiming(MusicScorePlayer.NoteType.Chop, e.BeatPoint);
+        CheckTiming(Note.NoteType.Chop, e.BeatPoint);
     }
 
-    private void CheckTiming(MusicScorePlayer.NoteType noteType, int beatPoint)
+    private void CheckTiming(Note.NoteType noteType, int beatPoint)
     {
         switch (beatPoint)
         {
@@ -67,47 +45,84 @@ public class GameController : MonoBehaviour
             case 2: rightBeatPoint.Pulse(); break;
         }
 
-        var note = player.GetNearestNote();
+        var note = musicScore.GetNearestNote(player.Progress);
         if (note != null && noteType == note.Type && beatPoint == note.BeatPoint)
         {
-            if (note.IsBeated) return; // ignore this since the note has already beaten
+            BeatNote(note);
+        }
+    }
 
-            var distance = player.GetDistanceFromProgress(note);
-            Debug.Log("Hit with distance (" + distance + ")");
+    private void HandleMissedNote()
+    {
+        foreach (var note in musicScore.Notes)
+        {
+            if (!note.IsBeated && note.Time < player.Progress - 20)
+            {
+                note.IsBeated = true;
+                Destroy(note.NoteObject);
+                scoreController.ResetCombo();
+                var comboTextMesh = comboText.GetComponent<TextMesh>();
+                comboTextMesh.text = "";
+            }
+        }
+    }
 
-            if (distance < 5)
-            {
-                var effect = Instantiate(coolEffect, note.NoteObject.transform.position, transform.rotation);
-                Destroy(effect, 0.25f);
-                Destroy(note.NoteObject);
-                note.IsBeated = true;
-                scoreController.AddCoolCount();
-            }
-            else if (distance < 10)
-            {
-                var effect = Instantiate(goodEffect, note.NoteObject.transform.position, transform.rotation);
-                Destroy(effect, 0.25f);
-                Destroy(note.NoteObject);
-                note.IsBeated = true;
-                scoreController.AddGoodCount();
-            }
-            else if (distance < 15)
-            {
-                var effect = Instantiate(badEffect, note.NoteObject.transform.position, transform.rotation);
-                Destroy(effect, 0.25f);
-                Destroy(note.NoteObject);
-                note.IsBeated = true;
-                scoreController.AddBadCount();
-            }
+    private void BeatNote(Note note)
+    {
+        if (note.IsBeated) return; // ignore this since the note has already beaten
+
+        var distance = player.GetDistanceFromProgress(note);
+        Debug.Log("Hit with distance (" + distance + ")");
+
+        if (distance < 5)
+        {
+            var effect = Instantiate(coolEffect, note.NoteObject.transform.position, transform.rotation);
+            Destroy(effect, 0.25f);
+            scoreController.AddCoolCount();
+        }
+        else if (distance < 10)
+        {
+            var effect = Instantiate(goodEffect, note.NoteObject.transform.position, transform.rotation);
+            Destroy(effect, 0.25f);
+            scoreController.AddGoodCount();
+        }
+        else if (distance < 15)
+        {
+            var effect = Instantiate(badEffect, note.NoteObject.transform.position, transform.rotation);
+            Destroy(effect, 0.25f);
+            scoreController.AddBadCount();
+        }
+
+        if (distance < 15)
+        {
+            Destroy(note.NoteObject);
+            note.IsBeated = true;
+            scoreController.AddCombo();
+        }
+        else
+        {
+            scoreController.ResetCombo();
+        }
+
+        // update combo text
+        var comboTextMesh = comboText.GetComponent<TextMesh>();
+        if (scoreController.Combo < 3)
+        {
+            comboTextMesh.text = "";
+        }
+        else
+        {
+            comboTextMesh.text = "COMBO\n" + scoreController.Combo;
+            comboText.GetComponent<ShakeAnimationBehavior>().Play();
         }
     }
 
     public void Start()
     {
-        // setup music score player
-        player.Load("TestMusic");
-        player.NoteTiming += OnNoteTiming;
-        player.Play(noteSkipTime);
+        // setup music score and player
+        musicScore.Load("TestMusic");
+        player = GetComponent<MusicScorePlayerBehavior>();
+        player.SetupNotes(musicScore, notePrefab);
 
         // setup motion detector
         motionDetector = FindObjectOfType<MotionDetector>();
@@ -121,29 +136,15 @@ public class GameController : MonoBehaviour
 
         // etc
         scoreController = GetComponent<ScoreController>();
+
+        player.Play();
     }
 
     public void Update()
     {
-        player.Update();
-
-        // activate beat point
-        leftBeatPoint.Inactivate();
-        centerBeatPoint.Inactivate();
-        rightBeatPoint.Inactivate();
-        if (motionDetector.PalmIsInLeft)
-        {
-            leftBeatPoint.Activate();
-        }
-        if (motionDetector.PalmIsInCenter)
-        {
-            centerBeatPoint.Activate();
-        }
-        if (motionDetector.PalmIsInRight)
-        {
-            rightBeatPoint.Activate();
-        }
-
+        // update notes
+        player.UpdateNotes(musicScore, noteSpeed);
+        HandleMissedNote();
 
         // handle key inputs
         if (Input.GetKeyDown(KeyCode.Space))
@@ -168,16 +169,12 @@ public class GameController : MonoBehaviour
         // autoplay
         if (isAutoPlayMode)
         {
-            var _note = player.GetNearestNote();
+            var _note = musicScore.GetNearestNote(player.Progress);
             var distance = player.GetDistanceFromProgress(_note);
             if (distance < 1 && !_note.IsBeated)
             {
                 Debug.Log("AutoPlay beats at prograss " + player.Progress);
-                var effect = Instantiate(coolEffect, _note.NoteObject.transform.position, transform.rotation);
-                Destroy(effect, 0.25f);
-                Destroy(_note.NoteObject);
-                _note.IsBeated = true;
-                scoreController.AddCoolCount();
+                BeatNote(_note);
             }
         }
     }

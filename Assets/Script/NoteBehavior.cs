@@ -1,26 +1,37 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class NoteBehavior : MonoBehaviour
 {
-    public float Speed { get; set; }
-
-    private void Move(float distance)
+    public void SetPosition(float z)
     {
-        transform.Translate(0, 0, -Speed, Space.World);
+        transform.position = new Vector3(
+            transform.position.x,
+            transform.position.y,
+            z);
     }
 
-    void Start()
+    public void SetPosition(float x, float y, float z)
     {
+        transform.position = new Vector3(x, y, z);
     }
 
-    void Update()
+    public void SetNoteType(Note.NoteType type)
     {
-        Move(Speed);
-
-        // Destroy itself
-        if (transform.position.z < -10)
+        switch (type)
         {
-            Destroy(gameObject);
+            case Note.NoteType.Chop:
+                transform.rotation = Quaternion.Euler(0, 0, 90);
+                break;
+            case Note.NoteType.Slide:
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+                break;
+            default:
+                throw new InvalidOperationException("Invalid note type");
         }
+    }
+
+    public void Update()
+    {
     }
 }
