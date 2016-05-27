@@ -1,0 +1,86 @@
+<musicScore>
+  <title>TestMusic1</title>
+  <notes>
+    <note x="-2" y="0" time="459" type="Chop" point="2"></note>
+    <note x="-2" y="0" time="686" type="Chop" point="1"></note>
+    <note x="-2" y="0" time="909" type="Slide" point="0"></note>
+    <note x="0" y="0" time="1136" type="Chop" point="2"></note>
+    <note x="0" y="0" time="1245" type="Chop" point="1"></note>
+    <note x="-2" y="0" time="1536" type="Chop" point="0"></note>
+    <note x="-2" y="0" time="1469" type="Slide" point="1"></note>
+    <note x="-2" y="0" time="1583" type="Chop" point="0"></note>
+    <note x="0" y="0" time="1693" type="Chop" point="2"></note>
+    <note x="0" y="0" time="1806" type="Chop" point="0"></note>
+    <note x="-2" y="0" time="1835" type="Chop" point="0"></note>
+    <note x="-2" y="0" time="1914" type="Chop" point="1"></note>
+    <note x="-2" y="0" time="1945" type="Chop" point="1"></note>
+    <note x="0" y="0" time="1976" type="Chop" point="0"></note>
+    <note x="0" y="0" time="2000" type="Chop" point="2"></note>
+    <note x="0" y="0" time="2138" type="Chop" point="0"></note>
+    <note x="0" y="0" time="2170" type="Chop" point="2"></note>
+    <note x="0" y="0" time="2201" type="Chop" point="0"></note>
+    <note x="0" y="0" time="2227" type="Chop" point="1"></note>
+    
+    <note x="0" y="0" time="2316" type="Chop" point="1"></note>
+    <note x="0" y="0" time="2341" type="Chop" point="2"></note>
+    <note x="0" y="0" time="2366" type="Chop" point="1"></note>
+    <note x="0" y="0" time="2396" type="Chop" point="0"></note>
+    <note x="0" y="0" time="2424" type="Chop" point="0"></note>
+    <note x="0" y="0" time="2452" type="Chop" point="1"></note>
+    
+    <note x="0" y="0" time="2542" type="Chop" point="0"></note>
+    <note x="0" y="0" time="2568" type="Chop" point="2"></note>
+    <note x="0" y="0" time="2595" type="Chop" point="2"></note>
+    <note x="0" y="0" time="2623" type="Chop" point="2"></note>
+    <note x="0" y="0" time="2649" type="Chop" point="1"></note>
+    <note x="0" y="0" time="2709" type="Slide" point="2"></note>
+    <note x="0" y="0" time="2737" type="Slide" point="0"></note>
+    
+    <note x="0" y="0" time="2766" type="Chop" point="2"></note>
+    <note x="0" y="0" time="2790" type="Chop" point="0"></note>
+    <note x="0" y="0" time="2818" type="Chop" point="1"></note>
+    <note x="0" y="0" time="2849" type="Chop" point="2"></note>
+    <note x="0" y="0" time="2877" type="Chop" point="2"></note>
+    <note x="0" y="0" time="2905" type="Chop" point="0"></note>
+    
+    <note x="0" y="0" time="2935" type="Slide" point="2"></note>
+    <note x="0" y="0" time="2964" type="Slide" point="1"></note>
+    
+    <note x="0" y="0" time="2988" type="Chop" point="1"></note>
+    <note x="0" y="0" time="3015" type="Chop" point="2"></note>
+    <note x="0" y="0" time="3043" type="Chop" point="0"></note>
+    <note x="0" y="0" time="3073" type="Chop" point="2"></note>
+    <note x="0" y="0" time="3101" type="Chop" point="1"></note>
+    <note x="0" y="0" time="3127" type="Chop" point="2"></note>
+    <note x="0" y="0" time="3216" type="Chop" point="0"></note>
+    <note x="0" y="0" time="3242" type="Chop" point="2"></note>
+    <note x="0" y="0" time="3269" type="Chop" point="1"></note>
+    <note x="0" y="0" time="3297" type="Chop" point="2"></note>
+    <note x="0" y="0" time="3322" type="Chop" point="0"></note>
+    <note x="0" y="0" time="3351" type="Chop" point="2"></note>
+    <note x="0" y="0" time="3381" type="Slide" point="0"></note>
+    <note x="0" y="0" time="3412" type="Slide" point="2"></note>
+    <note x="0" y="0" time="3439" type="Chop" point="2"></note>
+    <note x="0" y="0" time="3467" type="Chop" point="0"></note>
+    <note x="0" y="0" time="3496" type="Chop" point="1"></note>
+    <note x="0" y="0" time="3525" type="Chop" point="2"></note>
+    <note x="0" y="0" time="3550" type="Chop" point="1"></note>
+    <note x="0" y="0" time="3578" type="Chop" point="2"></note>
+    
+    <note x="0" y="0" time="3610" type="Chop" point="1"></note>
+    <note x="0" y="0" time="3611" type="Chop" point="0"></note>
+    
+    <note x="0" y="0" time="3715" type="Chop" point="2"></note>
+    <note x="0" y="0" time="3829" type="Chop" point="1"></note>
+    <note x="0" y="0" time="3942" type="Chop" point="1"></note>
+    <note x="0" y="0" time="4056" type="Chop" point="2"></note>
+    <note x="0" y="0" time="4084" type="Chop" point="2"></note>
+    <note x="0" y="0" time="4167" type="Chop" point="2"></note>
+    <note x="0" y="0" time="4190" type="Chop" point="2"></note>
+    <note x="0" y="0" time="4281" type="Chop" point="0"></note>
+    <note x="0" y="0" time="4304" type="Chop" point="0"></note>
+    <note x="0" y="0" time="4399" type="Chop" point="2"></note>
+    <note x="0" y="0" time="4421" type="Chop" point="1"></note>
+    <note x="0" y="0" time="4505" type="Chop" point="0"></note>
+  </notes>
+</musicScore>
