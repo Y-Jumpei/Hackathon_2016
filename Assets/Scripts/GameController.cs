@@ -178,7 +178,8 @@ public class GameController : MonoBehaviour
             }
         }
 
-		if (Input.GetKeyDown(KeyCode.R))
+        // music has finished
+		if (!player.IsPlaying)
         {
             FadeManager.Instance.LoadLevel("Result", 2.0f);
 		}
