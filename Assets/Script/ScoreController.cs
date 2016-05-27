@@ -6,10 +6,10 @@ using UnityEngine.UI;
 /// </summary>
 public class ScoreController : MonoBehaviour
 {
-	public static int coolCount = 0;
-	public static int goodCount = 0;
-	public static int badCount = 0;
-	public static int MaxCombo = 0;
+    public int coolCount = 0;
+    public int goodCount = 0;
+    public int badCount = 0;
+    public int MaxCombo = 0;
 
     public Text coolText;
     public Text goodText;
@@ -31,6 +31,15 @@ public class ScoreController : MonoBehaviour
     {
         Render();
         Combo = 0;
+    }
+
+    public void OnDestroy()
+    {
+        // set scores to pass to score scene
+        ScoreTransporter.coolCount = coolCount;
+        ScoreTransporter.badCount = badCount;
+        ScoreTransporter.goodCount = goodCount;
+        ScoreTransporter.maxCombo = MaxCombo;
     }
 
     public void AddCoolCount()
@@ -59,9 +68,9 @@ public class ScoreController : MonoBehaviour
     public void AddCombo()
     {
         Combo += 1;
-		if (MaxCombo < Combo) 
-		{
-			MaxCombo = Combo;
-		}
+        if (MaxCombo < Combo)
+        {
+            MaxCombo = Combo;
+        }
     }
 }

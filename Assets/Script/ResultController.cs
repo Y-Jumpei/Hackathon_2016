@@ -16,10 +16,10 @@ public class ResultController : MonoBehaviour
 
     public void Start()
     {
-        maxcomboText.text = "Max Combo: " + ScoreController.MaxCombo;
-        coolText.text = "Cool: " + ScoreController.coolCount;
-        goodText.text = "Good: " + ScoreController.goodCount;
-        badText.text = "Bad: " + ScoreController.badCount;
+        maxcomboText.text = "Max Combo: " + ScoreTransporter.maxCombo;
+        coolText.text = "Cool: " + ScoreTransporter.coolCount;
+        goodText.text = "Good: " + ScoreTransporter.goodCount;
+        badText.text = "Bad: " + ScoreTransporter.badCount;
 
         GetComponent<MotionDetector>().YSlide += OnSlideDetected;
     }
