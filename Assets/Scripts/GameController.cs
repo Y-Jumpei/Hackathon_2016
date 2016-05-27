@@ -26,6 +26,8 @@ public class GameController : MonoBehaviour
     public GameObject goodEffect;
     public GameObject badEffect;
 
+    public AudioSource beatSound;
+
     private void OnXSlideDetected(object sender, MotionDetectEventArgs e)
     {
         CheckTiming(Note.NoteType.Slide, e.BeatPoint);
@@ -95,6 +97,7 @@ public class GameController : MonoBehaviour
 
         if (distance < 15)
         {
+            // beatSound.Play();
             Destroy(note.NoteObject);
             note.IsBeated = true;
             scoreController.AddCombo();
