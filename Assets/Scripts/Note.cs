@@ -20,16 +20,6 @@ public class Note
     public float Time { get; private set; }
 
     /// <summary>
-    /// X coordinate of the initial position
-    /// </summary>
-    public float X { get; private set; }
-
-    /// <summary>
-    /// Y coordinate of the initial position
-    /// </summary>
-    public float Y { get; private set; }
-
-    /// <summary>
     /// Unity object that coressponds with the note
     /// </summary>
     public GameObject NoteObject { get; set; }
@@ -49,11 +39,9 @@ public class Note
     /// </summary>
     public NoteType Type { get; set; }
 
-    public Note(float time, float x, float y, NoteType type, int beatPoint)
+    public Note(float time, NoteType type, int beatPoint)
     {
         Time = time;
-        X = x;
-        Y = y;
         Type = type;
         BeatPoint = beatPoint;
         IsBeated = false;

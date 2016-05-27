@@ -120,7 +120,7 @@ public class GameController : MonoBehaviour
     public void Start()
     {
         // setup music score and player
-        musicScore.Load("TestMusic");
+        musicScore.Load("Eliminate");
         player = GetComponent<MusicScorePlayerBehavior>();
         player.SetupNotes(musicScore, notePrefab);
 
