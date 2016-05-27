@@ -11,7 +11,7 @@ public class ResultController : MonoBehaviour
 
     private void OnSlideDetected(object sender, MotionDetectEventArgs e)
     {
-        SceneManager.LoadScene("Title_CHURHYTHM");
+        FadeManager.Instance.LoadLevel("Title_CHURHYTHM", 2.0f);
     }
 
     public void Start()

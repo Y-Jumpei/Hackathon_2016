@@ -7,7 +7,7 @@ public class Title : MonoBehaviour
     {
         GetComponent<MotionDetector>().YSlide += (sender, e) =>
         {
-            SceneManager.LoadScene("Game");
+            FadeManager.Instance.LoadLevel("Game", 2.0f);
         };
     }
 
@@ -15,7 +15,7 @@ public class Title : MonoBehaviour
     {
         if (Input.anyKeyDown)
         {
-            SceneManager.LoadScene("Game");
+            FadeManager.Instance.LoadLevel("Game", 2.0f);
         }
     }
 

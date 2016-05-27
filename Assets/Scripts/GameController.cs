@@ -178,9 +178,9 @@ public class GameController : MonoBehaviour
             }
         }
 
-		if (Input.GetKeyDown(KeyCode.R)) 
-		{
-			SceneManager.LoadScene ("Result");
+		if (Input.GetKeyDown(KeyCode.R))
+        {
+            FadeManager.Instance.LoadLevel("Result", 2.0f);
 		}
     }
 }
