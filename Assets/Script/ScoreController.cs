@@ -6,9 +6,10 @@ using UnityEngine.UI;
 /// </summary>
 public class ScoreController : MonoBehaviour
 {
-    private int coolCount = 0;
-    private int goodCount = 0;
-    private int badCount = 0;
+	public static int coolCount = 0;
+	public static int goodCount = 0;
+	public static int badCount = 0;
+	public static int MaxCombo = 0;
 
     public Text coolText;
     public Text goodText;
@@ -58,5 +59,9 @@ public class ScoreController : MonoBehaviour
     public void AddCombo()
     {
         Combo += 1;
+		if (MaxCombo < Combo) 
+		{
+			MaxCombo = Combo;
+		}
     }
 }

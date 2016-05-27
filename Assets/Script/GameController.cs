@@ -177,5 +177,10 @@ public class GameController : MonoBehaviour
                 BeatNote(_note);
             }
         }
+
+		if (Input.GetKeyDown(KeyCode.R)) 
+		{
+			SceneManager.LoadScene ("Result");
+		}
     }
 }
