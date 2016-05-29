@@ -55,7 +55,7 @@ public class MusicScorePlayerBehavior : MonoBehaviour
             GameObject _note = Instantiate(notePrefab);
             var noteBehavior = _note.GetComponent<NoteBehavior>();
             _note.name = "Note";
-            noteBehavior.SetPosition(note.X, 0, 1000);
+            noteBehavior.SetPosition((note.BeatPoint - 1) * 2, 0, 1000);
             noteBehavior.SetNoteType(note.Type);
             note.NoteObject = _note;
         }

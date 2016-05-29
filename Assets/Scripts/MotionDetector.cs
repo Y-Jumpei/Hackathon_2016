@@ -22,16 +22,6 @@ public class MotionDetector : MonoBehaviour
     /// </summary>
     private class DetectorBase
     {
-        protected static List<SlideDetector> detectors = new List<SlideDetector>();
-
-        public static void UpdateAll()
-        {
-            foreach (var detector in detectors)
-            {
-                detector.Update();
-            }
-        }
-
         public bool IsDetected { get; protected set; }
     }
 
@@ -52,7 +42,6 @@ public class MotionDetector : MonoBehaviour
             this.target = target;
             this.predicate = predicate;
             prevPosition = target.transform.position;
-            detectors.Add(this);
         }
 
         public void Update()
@@ -78,6 +67,8 @@ public class MotionDetector : MonoBehaviour
     private SlideDetector rightXSlideDetector;
     private SlideDetector leftYSlideDetector;
     private SlideDetector rightYSlideDetector;
+
+    private List<SlideDetector> detectors = new List<SlideDetector>();
 
     // game objects
     public GameObject leftFinger;
@@ -137,11 +128,20 @@ public class MotionDetector : MonoBehaviour
         Predicate<Vector3> ySlidePredicate = (move) => move.y > slideThreshold;
         leftYSlideDetector = new SlideDetector(leftFinger, ySlidePredicate);
         rightYSlideDetector = new SlideDetector(rightFinger, ySlidePredicate);
+
+        detectors.Add(leftXSlideDetector);
+        detectors.Add(rightXSlideDetector);
+        detectors.Add(leftYSlideDetector);
+        detectors.Add(rightYSlideDetector);
     }
 
     public void Update()
     {
-        DetectorBase.UpdateAll();
+        // update detectors
+        foreach (var detector in detectors)
+        {
+            detector.Update();
+        }
 
         if (XSlide != null)
         {

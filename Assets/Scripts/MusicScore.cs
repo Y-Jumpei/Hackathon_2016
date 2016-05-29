@@ -48,8 +48,6 @@ public class MusicScore
             {
                 var note = new Note(
                     int.Parse(noteElement.Attribute("time").Value),
-                    int.Parse(noteElement.Attribute("x").Value),
-                    int.Parse(noteElement.Attribute("y").Value),
                     (Note.NoteType)Enum.Parse(typeof(Note.NoteType), noteElement.Attribute("type").Value),
                     int.Parse(noteElement.Attribute("point").Value));
                 score.Add(note);
